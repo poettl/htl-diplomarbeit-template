@@ -1,0 +1,54 @@
+% =====================================================================
+% Diploma thesis -- HTL Donaustadt, Department of Information Technology
+%
+% Build:  make          (or: latexmk -pdf diplomarbeit.tex)
+%
+% Class options:
+%   deutsch (default) | englisch
+%   ieee (default)    | harvard
+%   lato (default)    | inter | carlito | aptos
+%   entwurf           -- ENTWURF (draft) watermark on every page
+% =====================================================================
+\documentclass[deutsch,ieee,lato]{htldon}
+
+\addbibresource{references.bib}
+
+\input{metadata}
+
+\begin{document}
+
+% --- Front matter (no page numbers, not in the table of contents) -----
+\titelblatt
+\eigenstaendigkeitserklaerung
+\input{frontmatter/problem-statement}
+\input{frontmatter/abstract}
+
+\inhaltsverzeichnis
+
+% --- Main part -------------------------------------------------------
+\input{chapters/01-introduction}
+\input{chapters/02-project-planning}
+\input{chapters/03-fundamentals}
+\input{chapters/04-implementation}
+\input{chapters/05-evaluation}
+
+% --- Back matter (with an entry in the table of contents) -------------
+\abschnittsautor{}
+
+\quellenverzeichnis
+\abbildungsverzeichnis
+\tabellenverzeichnis
+\quellcodeverzeichnis
+
+\begin{abkuerzungsverzeichnis}[HTTPS]
+  \acro{API}{Application Programming Interface}
+  \acro{HTL}{Höhere Technische Lehranstalt}
+  \acro{HTTPS}{Hypertext Transfer Protocol Secure}
+  \acro{REST}{Representational State Transfer}
+\end{abkuerzungsverzeichnis}
+
+\nachspannkapitel{Anhang}
+\input{appendix/ai-tools}
+\listekihilfsmittel
+
+\end{document}

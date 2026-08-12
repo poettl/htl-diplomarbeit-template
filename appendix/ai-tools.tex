@@ -1,0 +1,23 @@
+% =====================================================================
+% Documentation of the AI-based tools used.
+% One row per tool and purpose:
+%   \kihilfsmittel{tool}{form of use}{affected parts}{prompts used}
+% The table itself is typeset in diplomarbeit.tex via \listekihilfsmittel.
+% If no AI tool was used, delete every row -- the table then disappears
+% automatically.
+% =====================================================================
+
+\kihilfsmittel{Claude Opus (Anthropic)}
+  {Ausschließlich zur Prüfung von Rechtschreibung und Grammatik. Inhalte selbst verfasst.}
+  {Gesamtes Dokument}
+  {\enquote{Überprüfe folgenden Text auf Rechtschreib-, Grammatik- und Beistrichfehler.}}
+
+\kihilfsmittel{Claude Opus (Anthropic)}
+  {Ausschließlich zur Übersetzung ins Englische. Inhalt selbst verfasst.}
+  {Kapitel \enquote{Abstract}}
+  {\enquote{Übersetze folgenden Text ins Englische, ohne den Inhalt zu verändern.}}
+
+\kihilfsmittel{GitHub Copilot}
+  {Codevervollständigung während der Implementierung. Ergebnisse geprüft und angepasst.}
+  {Praktische Realisierung}
+  {Inline-Vorschläge, keine expliziten Prompts}

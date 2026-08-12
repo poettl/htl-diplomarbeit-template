@@ -1,0 +1,48 @@
+# =====================================================================
+# Build directory -- latexmk writes everything in here.
+# The finished PDF does NOT belong in the repository.
+# =====================================================================
+build/
+*.pdf
+!images/*.pdf
+
+# =====================================================================
+# LaTeX auxiliary files, in case someone builds in the root directory
+# =====================================================================
+*.aux
+*.bbl
+*.bcf
+*.blg
+*.fdb_latexmk
+*.fls
+*.idx
+*.ilg
+*.ind
+*.lof
+*.log
+*.lol
+*.lot
+*.out
+*.run.xml
+*.synctex.gz
+*.synctex(busy)
+*.toc
+*.xdv
+
+# latexindent
+*.bak[0-9]*
+
+# =====================================================================
+# Editors
+# =====================================================================
+.texpadtmp/
+.vscode/
+.idea/
+*.sublime-workspace
+
+# =====================================================================
+# Operating system
+# =====================================================================
+.DS_Store
+Thumbs.db
+desktop.ini

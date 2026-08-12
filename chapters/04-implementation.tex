@@ -1,0 +1,32 @@
+\chapter{Praktische Realisierung}
+\abschnittsautor{B. Beispiel}
+
+Das Kernkapitel: Was habt ihr gebaut, welche Entscheidungen habt ihr dabei
+getroffen und warum? Beschreibt Entscheidungen mit ihren Alternativen, nicht
+nur das Endergebnis.
+
+\section{Umsetzung Teilbereich A}
+
+Kurze Codeausschnitte bindet ihr als Listing ein -- nicht als Screenshot:
+
+\begin{lstlisting}[language=Python, caption={Beispiel für ein Quellcode-Listing}, label=code:beispiel]
+def berechne_gesamtpreis(positionen):
+    """Summiert die Positionen eines Warenkorbs."""
+    return sum(p.menge * p.einzelpreis for p in positionen)
+\end{lstlisting}
+
+Auf Listings verweist ihr mit \verb|\ref|: siehe Quellcode~\ref{code:beispiel}.
+Einzelne Bezeichner im Fließtext setzt ihr mit \verb|\texttt|, etwa
+\texttt{berechne\_gesamtpreis}.
+
+\subsection{Ein Detail der Umsetzung}
+
+Beschreibt hier ein konkretes Problem und wie ihr es gelöst habt.
+
+\section{Umsetzung Teilbereich B}
+\abschnittsautor{V. Vorlage}
+
+Jedes Teammitglied dokumentiert seinen eigenen Teil. Den Verfasser stellt ihr
+direkt nach \verb|\section| mit \verb|\abschnittsautor| um -- das geht pro
+Unterkapitel, nicht nur pro Kapitel. Teilen sich zwei Abschnitte eine Seite,
+nennt die Kopfzeile beide.

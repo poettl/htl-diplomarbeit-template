@@ -1,0 +1,32 @@
+name: PDF bauen
+
+# Builds the thesis on every push and attaches the finished PDF to the run as
+# an artifact. That way everyone on the team sees immediately whether the
+# thesis still compiles -- even without a local TeX installation.
+#
+# The workflow and step names stay German on purpose: the README points
+# students at the step called "LaTeX-Dokument übersetzen", so the label here
+# has to match what GitHub shows them.
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: LaTeX-Dokument übersetzen
+        uses: xu-cheng/latex-action@v4
+        with:
+          root_file: diplomarbeit.tex
+
+      - name: PDF als Artefakt hochladen
+        uses: actions/upload-artifact@v7
+        with:
+          name: diplomarbeit
+          path: build/diplomarbeit.pdf
+          if-no-files-found: error
