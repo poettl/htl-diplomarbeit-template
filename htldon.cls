@@ -89,7 +89,50 @@
 }
 \RequirePackage[scaled=0.94]{inconsolata}
 \RequirePackage{microtype}
-\linespread{1.15}
+
+% =====================================================================
+% Vertical rhythm -- read off the Word template's paragraph styles.
+%
+%   Normal: spacing before=120, after=240, line=288 lineRule=auto
+%   -> 6 pt above, 12 pt below, line spacing 1.2.
+%
+% Word adds the space below one paragraph to the space above the next
+% instead of collapsing them, so consecutive paragraphs sit 18 pt apart.
+% \parskip reproduces exactly that gap; the heading skips further down add
+% their own 12 pt on top of the preceding 12 pt, again as Word does.
+% =====================================================================
+\RequirePackage{setspace}
+\setstretch{1.2}
+\setlength{\parindent}{0pt}
+\newlength{\htl@parskip}
+\setlength{\htl@parskip}{18pt plus 2pt minus 3pt}
+\setlength{\parskip}{\htl@parskip}
+
+% After a heading Word inserts far less: the heading's own space below plus
+% the following paragraph's 6 pt above. TeX on the other hand always puts the
+% full \parskip in front of that paragraph, which would add the 12 pt that
+% belong BETWEEN two body paragraphs and nowhere else. So \parskip drops to
+% those 6 pt for the first paragraph after a heading and is restored as soon
+% as the paragraph has started -- by then the glue is already on the page.
+% What is left over is the heading's own space below, which is the afterskip
+% further down: 3 pt for Überschrift 1-3, nothing for Überschrift 4 and 5.
+\let\htl@orig@afterheading\@afterheading
+\renewcommand*{\@afterheading}{%
+  \setlength{\parskip}{6pt}%
+  \htl@orig@afterheading
+  \expandafter\everypar\expandafter{\the\everypar
+    \setlength{\parskip}{\htl@parskip}}%
+}
+
+% Word's "Listenabsatz": numbering at 360 twips, text at 720 twips -- 6.35 mm
+% and 12.7 mm -- left aligned. Word would put 12 pt between the items (6 pt
+% below plus 6 pt above), but items are usually one line and that pulls a
+% short list apart, so only the 6 pt below are kept.
+% topsep stays 0 because LaTeX already puts \parskip in front of the list,
+% which is the 18 pt Word arrives at the same way.
+\RequirePackage{enumitem}
+\setlist{leftmargin=12.7mm, labelwidth=6.35mm, labelsep=0pt, align=left,
+         topsep=0pt, partopsep=0pt, parsep=0pt, itemsep=6pt}
 
 % =====================================================================
 % Page layout -- taken 1:1 from Vorlage_Diplomarbeit_2025_v6.dotx.
@@ -264,27 +307,67 @@
 
 % =====================================================================
 % Headings: blue, UPPERCASE, bold, hanging indent
+%
+% Sizes and indents are the Word template's "Überschrift 1-4" verbatim.
+% Word stores half-points and twips, so:
+%   H1  sz=32 -> 16 pt, ind hanging=567 -> 10.0 mm, before=240/after=60
+%   H2  sz=28 -> 14 pt, hanging=680     -> 12.0 mm, before=240/after=60
+%   H3  sz=24 -> 12 pt, hanging=794     -> 14.0 mm, before=240/after=60
+%   H4  sz=22 -> 11 pt, hanging=936     -> 16.5 mm, before=200/after=0
+% All four are bold and in capitals; only H1 declares the blue, H2-H4
+% inherit it. The indents are absolute, which is why they are set in mm and
+% not in em -- in Word they do not shrink with the smaller heading sizes.
+%
+% The skips add the neighbouring paragraph's own spacing, because that is
+% how the two stack up in Word: a heading follows 12 pt below the previous
+% paragraph's 12 pt (= 24 pt) and is followed by its own 3 pt plus the next
+% paragraph's 6 pt (= 9 pt).
 % =====================================================================
-\setkomafont{chapter}{\color{htlblau}\bfseries\Large}
-\setkomafont{section}{\color{htlblau}\bfseries\large}
-\setkomafont{subsection}{\color{htlblau}\bfseries\normalsize}
-\setkomafont{subsubsection}{\color{htlblau}\bfseries\normalsize}
+\setkomafont{chapter}{\color{htlblau}\bfseries\fontsize{16}{19.2}\selectfont}
+\setkomafont{section}{\color{htlblau}\bfseries\fontsize{14}{16.8}\selectfont}
+\setkomafont{subsection}{\color{htlblau}\bfseries\fontsize{12}{14.4}\selectfont}
+\setkomafont{subsubsection}{\color{htlblau}\bfseries\fontsize{11}{13.2}\selectfont}
+% "Überschrift 5": no number, not in the table of contents, and black --
+% the style is based on Standard, not on Überschrift 1.
+\setkomafont{paragraph}{\bfseries\fontsize{11}{13.2}\selectfont}
 
 \renewcommand{\chapterlinesformat}[3]{\@hangfrom{#2}{\MakeUppercase{#3}}}
 \renewcommand*{\sectionlinesformat}[4]{\@hangfrom{\hskip #2#3}{\MakeUppercase{#4}}}
 
-\renewcommand*{\chapterformat}{\makebox[1.6em][l]{\thechapter}}
-\renewcommand*{\sectionformat}{\makebox[2.6em][l]{\thesection}}
-\renewcommand*{\subsectionformat}{\makebox[3.4em][l]{\thesubsection}}
-\renewcommand*{\subsubsectionformat}{\makebox[4.2em][l]{\thesubsubsection}}
+\renewcommand*{\chapterformat}{\makebox[10.0mm][l]{\thechapter}}
+\renewcommand*{\sectionformat}{\makebox[12.0mm][l]{\thesection}}
+\renewcommand*{\subsectionformat}{\makebox[14.0mm][l]{\thesubsection}}
+\renewcommand*{\subsubsectionformat}{\makebox[16.5mm][l]{\thesubsubsection}}
 
-\RedeclareSectionCommand[beforeskip=0pt, afterskip=1.2\baselineskip]{chapter}
-\RedeclareSectionCommand[beforeskip=-1.6\baselineskip, afterskip=.5\baselineskip]{section}
-\RedeclareSectionCommand[beforeskip=-1.3\baselineskip, afterskip=.4\baselineskip]{subsection}
+% chapter: beforeskip stays 0, a chapter always begins on a fresh page
+% (Word: pageBreakBefore).
+% afterskip carries only the heading's own space below; the 6 pt of the
+% paragraph that follows come from the \parskip patch above.
+\RedeclareSectionCommand[beforeskip=0pt, afterskip=3pt]{chapter}
+\RedeclareSectionCommand[beforeskip=-24pt, afterskip=3pt]{section}
+\RedeclareSectionCommand[beforeskip=-24pt, afterskip=3pt]{subsection}
+\RedeclareSectionCommand[beforeskip=-22pt, afterskip=1sp]{subsubsection}
+\RedeclareSectionCommand[runin=false, beforeskip=-22pt, afterskip=1sp]{paragraph}
 
 \setcounter{secnumdepth}{3}
 \setcounter{tocdepth}{2}
 \addtokomafont{chapterentry}{\normalfont\normalsize}
+
+% Table of contents, again straight from Word: TOC 1-3 indent the entry by
+% 0 / 238 / 442 twips and set the number tab at 440 / 880 / 1320, so the
+% number occupies 7.8 / 11.3 / 15.5 mm. Every entry carries 6 pt above and
+% 6 pt below.
+% Every entry of a list is a paragraph, so \parskip would land between the
+% lines on top of the beforeskip. The lists set their own spacing.
+%
+% Word's "Verzeichnis 1-3" declares 6 pt below each entry and inherits 6 pt
+% above from Standard. Adding both, the way Word does between two ordinary
+% paragraphs, pushes the table of contents onto a second page and reads far
+% too loose, so only the 6 pt below are kept.
+\BeforeStartingTOC{\setlength{\parskip}{0pt}}
+\DeclareTOCStyleEntry[indent=0mm,   numwidth=7.8mm,  beforeskip=6pt]{tocline}{chapter}
+\DeclareTOCStyleEntry[indent=4.2mm, numwidth=11.3mm, beforeskip=6pt]{tocline}{section}
+\DeclareTOCStyleEntry[indent=7.8mm, numwidth=15.5mm, beforeskip=6pt]{tocline}{subsection}
 
 % =====================================================================
 % Figures and tables
@@ -301,8 +384,13 @@
 \RequirePackage{booktabs}
 \RequirePackage{xltabular}
 \RequirePackage{caption}
-\captionsetup{font=small, labelfont=bf, textfont=bf,
-              labelsep=colon, justification=centering, skip=8pt}
+% Word's "Beschriftung" is centred and single-spaced, but also 11 pt and bold
+% throughout. At the size of the body text a caption competes with it, so the
+% caption text drops to 10 pt and only the label stays bold.
+% The 18 pt gap is what Word ends up with between the picture's paragraph
+% (12 pt below) and the caption (6 pt above).
+\captionsetup{font={small, stretch=1}, labelfont=bf,
+              labelsep=colon, justification=centering, skip=18pt}
 \AtBeginDocument{%
   \renewcommand*{\figurename}{\htl@txt{Abb.}{Fig.}}%
   \renewcommand*{\tablename}{Tab.}%
@@ -319,13 +407,28 @@
 
 % indent=0pt: the entries used to start 16.4pt inside the left margin, which
 % put them out of line with every heading on the page.
-\DeclareTOCStyleEntry[indent=0pt, numwidth=4.2em]{tocline}{figure}
-\DeclareTOCStyleEntry[indent=0pt, numwidth=4.2em]{tocline}{table}
+% beforeskip=6pt: Word's "Abbildungsverzeichnis" style sets after=0 and keeps
+% Standard's 6 pt above.
+\DeclareTOCStyleEntry[indent=0pt, numwidth=4.2em, beforeskip=6pt]{tocline}{figure}
+\DeclareTOCStyleEntry[indent=0pt, numwidth=4.2em, beforeskip=6pt]{tocline}{table}
 \DeclareCaptionListFormat{htlcode}{\lstlistingname~#2:}
 \captionsetup[table]{position=top}
 \counterwithout{figure}{chapter}
 \counterwithout{table}{chapter}
 \renewcommand*{\arraystretch}{1.3}
+
+% Word's "Tabellen Inhalt" and the Tabellenraster style: 10 pt inside every
+% table, no space between the paragraphs of a cell, and left aligned rather
+% than justified. \tabkopf is "Tabellen Überschrift" -- bold and italic.
+\newcommand{\tabellenschrift}{%
+  \small\setlength{\parskip}{0pt}\selectfont}
+\newcommand{\tabkopf}[1]{\textbf{\textit{#1}}}
+\AtBeginEnvironment{tabular}{\tabellenschrift}
+\AtBeginEnvironment{tabularx}{\tabellenschrift}
+\AtBeginEnvironment{xltabular}{\tabellenschrift}
+
+% Word: "footnote text" is 10 pt with single line spacing.
+\setkomafont{footnote}{\setstretch{1}\small\setlength{\parskip}{0pt}}
 
 % =====================================================================
 % Source code listings
@@ -336,6 +439,11 @@
 % Deliberately not brand-coloured: a listing is quoted material, not a piece
 % of the school's identity, and blue keywords next to blue headings made the
 % page read as if the code were another heading.
+% listings ends every code line with \par, so the 18 pt \parskip of the body
+% text would end up between the lines and tear the frame apart. The hook runs
+% inside the listing's own group, and it is also where the guideline's
+% "Zeilenabstand 1,0" is set.
+\lst@AddToHook{Init}{\setlength{\parskip}{0pt}\linespread{1}\selectfont}
 \lstset{
   basicstyle=\ttfamily\footnotesize,
   keywordstyle=\bfseries,
@@ -362,6 +470,29 @@
 % 6.2em covers the label, measured at 60.9pt in the 11pt text font.
 \captionsetup[lstlisting]{listformat=htlcode}
 % The entry itself is set where the list is printed, see \quellcodeverzeichnis.
+
+% =====================================================================
+% The remaining Word paragraph and character styles
+%
+% Chapter 6 of the department template prescribes these by name, so the
+% class has to offer them:
+%   "Zitat im Text"                   italic
+%   "Zitat freistehend"               italic, indented by 709 twips = 12.5 mm
+%   "Menüauswahl/Tastenkombination"   small capitals
+% =====================================================================
+\newcommand{\zitat}[1]{\emph{#1}}
+\newenvironment{zitatfreistehend}
+  {\begin{list}{}{%
+     \setlength{\leftmargin}{12.5mm}%
+     \setlength{\rightmargin}{0pt}%
+     \setlength{\topsep}{0pt}\setlength{\partopsep}{0pt}%
+     \setlength{\itemsep}{0pt}\setlength{\parsep}{\parskip}}%
+   \item\relax\itshape}
+  {\end{list}}
+% Capitals rather than \textsc: none of the four selectable typefaces ships a
+% small-caps shape, so \textsc would silently fall back to the upright one and
+% the menu path would be indistinguishable from ordinary text.
+\newcommand{\menue}[1]{\MakeUppercase{#1}}
 
 % =====================================================================
 % Abbreviations and bibliography
@@ -540,6 +671,9 @@
 \newcommand{\quellcodeverzeichnis}{%
   \nachspannkapitel{\lstlistlistingname}%
   \begingroup
+    % \@starttoc bypasses tocbasic, so the \parskip that \BeforeStartingTOC
+    % takes off the other lists has to go here by hand.
+    \setlength{\parskip}{0pt}%
     % 6.2em fits "Quellcode 1:", measured at 60.9pt in the 11pt text font.
     % Too narrow and the label overprints the caption next to it.
     \renewcommand*{\l@lstlisting}[2]{\@dottedtocline{1}{0pt}{6.2em}{##1}{##2}}%
@@ -561,7 +695,7 @@
 \newcommand{\listekihilfsmittel}{%
   \ifdefempty{\htl@kiliste}{}{%
     \begingroup
-    \small
+    % No \small here -- xltabular already picks up \tabellenschrift.
     \setlength{\tabcolsep}{7pt}%
     \newcolumntype{Y}{>{\raggedright\arraybackslash}X}%
     \begin{xltabular}{\linewidth}{@{}YYYY@{}}

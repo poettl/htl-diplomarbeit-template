@@ -1,8 +1,8 @@
-# Diploma Thesis Template — HTL Donaustadt, Department of Information Technology
+# Diploma Thesis Template for HTL Donaustadt, Department of Information Technology
 
 LaTeX template for your diploma thesis. Title page, declaration of authorship,
 headers and footers, every list, and the AI tools table in the appendix are
-done — all you write is the content.
+done. All you write is the content.
 
 The thesis itself is written in German, so the template's own text and the
 command names stay German. Only this documentation is in English.
@@ -15,7 +15,7 @@ command names stay German. Only this documentation is in English.
 
 **1. Fork once per team.** A fork is a copy of a repository that you can work
 on without touching the original. One person clicks **Fork** at the top right
-of the repository page — that copy becomes the team repository. Either use a
+of the repository page, and that copy becomes the team repository. Either use a
 GitHub organisation or create it under one team member's account.
 
 **2. Add everyone.** Under **Settings → Collaborators**, add the other team
@@ -85,8 +85,8 @@ derived from it.
 ```
 
 The date under the declaration of authorship is the build date unless you set
-`\abgabedatum{...}` — which is usually what you want, because the printout you
-sign carries the day you printed it.
+`\abgabedatum{...}`. The build date is usually what you want, because the
+printout you sign carries the day you printed it.
 
 `\teammitglied` automatically produces:
 
@@ -114,17 +114,24 @@ chapters/
   03-fundamentals.tex      the technologies you use
   04-implementation.tex    what you built              <- the core chapter
   05-evaluation.tex        target/actual comparison, conclusion
+  06-guideline.tex         the department's guideline  <- delete before submitting
 appendix/
   ai-tools.tex             AI tools used
 images/                    all screenshots and diagrams
 references.bib             all sources
 diplomarbeit.tex           order of the parts + list of abbreviations
-htldon.cls                 the layout — do not modify
+htldon.cls                 the layout, do not modify
 build/                     created by the build, not tracked in Git
 ```
 
 Need an extra chapter? Create a new file in `chapters/` and pull it in at the
-right place in `diplomarbeit.tex` with `\input{chapters/06-...}`.
+right place in `diplomarbeit.tex` with `\input{chapters/07-...}`.
+
+`chapters/06-guideline.tex` is chapter 6 of the department's Word template,
+rewritten for LaTeX. Read it once at the start: it is what you are graded
+against. **Delete it before you submit**: remove the
+`\input{chapters/06-guideline}` line from `diplomarbeit.tex` and the file
+itself.
 
 ---
 
@@ -144,7 +151,7 @@ The caption belongs **below** the image:
 ```
 
 Refer to it in the text: `wie in Abb.~\ref{abb:startseite} zu sehen`. Never
-write "see image above" — the position can shift when the page breaks.
+write "see image above", because the position can shift when the page breaks.
 
 Figures and tables are numbered continuously across the whole thesis
 (Abb. 1, Abb. 2, Abb. 3 …), not per chapter, and are labelled `Abb.` and
@@ -165,14 +172,14 @@ works, but it drifts. The setup that holds up over a school year is
 [Zotero](https://www.zotero.org/) plus the
 [Better BibTeX](https://retorque.re/zotero-better-bibtex/) plugin:
 
-1. Collect sources in Zotero — the browser connector grabs a paper, a
+1. Collect sources in Zotero. The browser connector grabs a paper, a
    standard, or a web page including its access date in one click.
 2. Put everything for the thesis into one Zotero collection.
 3. Right-click the collection → **Export Collection** → format **Better
    BibTeX**, tick **Keep updated**, and save it over `references.bib`.
 
 From then on Zotero rewrites `references.bib` whenever you add or change a
-source — you only write the `\cite`. Two things worth doing right away:
+source, and you only write the `\cite`. Two things worth doing right away:
 
 - **Pin the citation keys.** Better BibTeX generates keys like
   `matiushin2021`, but regenerates them when metadata changes, which silently
@@ -184,12 +191,12 @@ source — you only write the `\cite`. Two things worth doing right away:
 
 Not attached to Zotero? [JabRef](https://www.jabref.org/) edits `.bib` files
 directly and needs no export step. Single entries also come straight out of
-Google Scholar (*Cite → BibTeX*) or IEEE Xplore — fine for a handful of
-sources, tedious past that.
+Google Scholar (*Cite → BibTeX*) or IEEE Xplore. That is fine for a handful
+of sources and tedious past that.
 
 ### Show code
 
-Short excerpts as a listing — **never as a screenshot**:
+Short excerpts as a listing, **never as a screenshot**:
 
 ```latex
 \begin{lstlisting}[language=Python, caption={Berechnung des Gesamtpreises}, label=code:preis]
@@ -198,7 +205,9 @@ def berechne_gesamtpreis(positionen):
 \end{lstlisting}
 ```
 
-Single identifiers inside a paragraph: `\texttt{berechne\_gesamtpreis}`.
+Single identifiers inside a paragraph: `\lstinline|berechne_gesamtpreis|`. It
+keeps the syntax highlighting and needs no escaping of `_`, `#` or `&`, which
+`\texttt` would.
 
 ### Use an abbreviation
 
@@ -242,7 +251,8 @@ author carries over, so you only write it where something actually changes.
 
 > **One case stays manual.** If a section runs past a page break and the next
 > author's section starts further down that same page, only the second one is
-> listed — LaTeX cannot tell how much of the page belonged to whom. Name both
+> listed, because LaTeX cannot tell how much of the page belonged to whom.
+> Name both
 > by hand there: `\abschnittsautor{B. Beispiel, V. Vorlage}`. Word has the
 > same limitation, which is why the department guideline asks you to name
 > everyone who worked on a page.
@@ -287,6 +297,44 @@ author carries over, so you only write it where something actually changes.
 | `\kihilfsmittel{}{}{}{}` | one row in the AI tools table |
 | `\listekihilfsmittel` | typesets the AI tools table |
 | `\alleautoren` | all team members in short form |
+| `\zitat{...}` | a quotation inside a paragraph (Word: *Zitat im Text*) |
+| `zitatfreistehend` environment | a quotation as a paragraph of its own (Word: *Zitat freistehend*) |
+| `\menue{...}` | a menu path or a key combination (Word: *Menüauswahl/Tastenkombination*) |
+| `\tabkopf{...}` | header cell of a table (Word: *Tabellen Überschrift*) |
+
+### What the layout takes from the Word template
+
+`htldon.cls` reproduces the paragraph styles of
+`Vorlage_Diplomarbeit_2025_v6.dotx` rather than approximating them. If a
+supervisor measures the PDF against a Word document, these are the numbers:
+
+| | Word | in the class |
+| --- | --- | --- |
+| Page margins | left 30, right 20, top 25, bottom 20 mm, header/footer at 13 mm | same |
+| Body text | 11 pt, justified, line spacing 1.2 | same |
+| Space between paragraphs | 6 pt above + 12 pt below = 18 pt | `\parskip` 18 pt |
+| Überschrift 1–4 | 16 / 14 / 12 / 11 pt, bold, capitals, blue | same |
+| Heading indent | 10.0 / 12.0 / 14.0 / 16.5 mm, hanging | same |
+| Space around a heading | 12 pt above, 3 pt below (H4: 10 / 0) | same |
+| Lists | number at 6.35 mm, text at 12.7 mm | same, 6 pt between items |
+| Captions | 11 pt, bold, centred, single-spaced | 10 pt, only the label bold |
+| Tables | 10 pt, left aligned, header bold italic | same |
+| Footnotes | 10 pt, single-spaced | same |
+| Header and footer | 10 pt with a rule | same |
+| Table of contents | indent 0 / 4.2 / 7.8 mm, number 7.8 / 11.3 / 15.5 mm | same, 6 pt between entries |
+
+Where Word adds both the space below one paragraph and the space above the
+next, the class follows it for body text (6 + 12 = 18 pt) but not inside
+lists, the table of contents and the other lists. Doing it there too pushes
+the table of contents onto a second page and pulls short bullet lists apart.
+Captions drop to 10 pt with only the label in bold, because at the size of
+the body text a bold caption competes with the text it belongs to.
+
+Two more things deliberately differ. Small capitals become full capitals in
+`\menue`, because none of the four selectable typefaces ships a small-caps
+shape and `\textsc` would silently fall back to ordinary text. And listings
+use a monospaced screen font instead of Courier New. The guideline's real
+requirement is a fixed-width font at single spacing, which is what you get.
 
 ---
 
@@ -295,14 +343,14 @@ author carries over, so you only write it where something actually changes.
 | Message / problem | Cause and fix |
 | --- | --- |
 | `Undefined control sequence` | Typo in a command, or a missing `{}`. The line number in the error is almost always right. |
-| `File 'images/xy.png' not found` | Wrong file name or path. Case matters (on Linux and Overleaf, not on Windows — so be extra careful there). |
+| `File 'images/xy.png' not found` | Wrong file name or path. Case matters (on Linux and Overleaf, not on Windows, so be extra careful there). |
 | A citation renders as `[?]` | Check `references.bib`, then run `make clean` and rebuild. The key in `\cite` has to match the BibTeX entry exactly. |
-| A reference renders as `??` | Build twice — `latexmk` normally handles this itself. |
+| A reference renders as `??` | Build twice. `latexmk` normally handles this itself. |
 | `Overfull \hbox` | Just a warning: a line sticks into the margin. Usually a long word or a URL. Ignorable unless you can actually see it. |
 | Image in the wrong place | Normal. LaTeX moves figures to where they fit, which is why you always refer to them with `\ref`. |
 | Everything broken after a change | `make clean`, then rebuild. |
 
-After that, `build/diplomarbeit.log` is the next place to look — the first
+After that, `build/diplomarbeit.log` is the next place to look. The first
 error from the top is the relevant one, everything after it is fallout.
 
 ---
@@ -311,7 +359,7 @@ error from the top is the relevant one, everything after it is fallout.
 
 - **One repository for everyone**, each person works on their own chapter
   files. That way there are hardly any merge conflicts.
-- `build/` is in `.gitignore` — **never** commit the PDF or the auxiliary
+- `build/` is in `.gitignore`, so **never** commit the PDF or the auxiliary
   files.
 - Write **one sentence per line** in the `.tex` files. Then `git diff` shows
   exactly what changed instead of a whole paragraph.
@@ -319,34 +367,31 @@ error from the top is the relevant one, everything after it is fallout.
 
 ### The PDF builds itself: GitHub Actions
 
-Your fork contains `.github/workflows/build.yml`. That is a **GitHub Action** —
+Your fork contains `.github/workflows/build.yml`. That is a **GitHub Action**,
 a build job GitHub runs automatically on its own server on every push. It does
 exactly what `make pdf` does locally, only in the cloud.
 
 What you get from it:
 
 - **You notice immediately when the thesis stops compiling.** If somebody
-  forgets a brace and pushes, the run turns red and everyone sees it — instead
+  forgets a brace and pushes, the run turns red and everyone sees it, instead
   of it surfacing two weeks later during a merge.
 - **Everyone can get the current PDF** without having LaTeX installed. Handy
   for your supervisors: click the run, download the PDF, done.
 - **It is the neutral authority.** "But it builds on my machine" no longer
-  counts — what counts is what the server says.
+  counts. What counts is what the server says.
 
 How to look at it:
 
 1. Open the **Actions** tab in your fork.
 2. Click the topmost run (green check = fine, red X = error).
-3. At the bottom under **Artifacts** you'll find `diplomarbeit` — that's the
+3. At the bottom under **Artifacts** you'll find `diplomarbeit`, which is the
    PDF.
 4. On a red X: click the *LaTeX-Dokument übersetzen* step. The error is the
    same one you would get locally.
 
-Artifacts are deleted automatically after a few weeks. This is not a backup —
-your backup is the repository itself.
-
-> If GitHub reports that an action is outdated, raise the version numbers after
-> the `@` in `build.yml` (`actions/checkout@v7` and so on).
+Artifacts are deleted automatically after a few weeks. This is not a backup.
+Your backup is the repository itself.
 
 ---
 
@@ -359,22 +404,12 @@ your backup is the repository itself.
 - [ ] Every figure and table has a caption and is referenced in the text
 - [ ] No entry in the bibliography that is never cited
 - [ ] AI tools fully documented in `appendix/ai-tools.tex`
+- [ ] `chapters/06-guideline.tex` removed, along with its `\input` line
 - [ ] Build produces no errors and no `??` / `[?]` in the PDF
-
----
-
-## Open questions for the department
-
-1. **Wording of the declaration of authorship** — if there is an officially
-   prescribed text, it belongs in `htldon.cls` (macro `\htl@erklaerungstext`).
-2. **Page numbers** — the template centres a page number in the footer. To
-   remove it, replace `\cfoot{\pagemark}` with `\cfoot{}` in `htldon.cls`.
-3. **Logo** — `images/logo-htl-donaustadt.png` is a raster image. If a vector
-   version exists, please replace it.
 
 ---
 
 ## License
 
 `htldon.cls` and the example files are MIT licensed. The school logo is
-excluded — see `LICENSE` for details.
+excluded, see `LICENSE` for details.
