@@ -312,10 +312,10 @@ supervisor measures the PDF against a Word document, these are the numbers:
 | --- | --- | --- |
 | Page margins | left 30, right 20, top 25, bottom 20 mm, header/footer at 13 mm | same |
 | Body text | 11 pt, justified, line spacing 1.2 | same |
-| Space between paragraphs | 6 pt above + 12 pt below = 18 pt | `\parskip` 18 pt |
+| Space between paragraphs | 6 pt above + 12 pt below | 12 pt |
 | Überschrift 1–4 | 16 / 14 / 12 / 11 pt, bold, capitals, blue | same |
 | Heading indent | 10.0 / 12.0 / 14.0 / 16.5 mm, hanging | same |
-| Space around a heading | 12 pt above, 3 pt below (H4: 10 / 0) | same |
+| Space above a heading | 12 pt on every level | 19 / 16 / 14 pt by level |
 | Lists | number at 6.35 mm, text at 12.7 mm | same, 6 pt between items |
 | Captions | 11 pt, bold, centred, single-spaced | 10 pt, only the label bold |
 | Tables | 10 pt, left aligned, header bold italic | same |
@@ -323,18 +323,22 @@ supervisor measures the PDF against a Word document, these are the numbers:
 | Header and footer | 10 pt with a rule | same |
 | Table of contents | indent 0 / 4.2 / 7.8 mm, number 7.8 / 11.3 / 15.5 mm | same, 6 pt between entries |
 
-Where Word adds both the space below one paragraph and the space above the
-next, the class follows it for body text (6 + 12 = 18 pt) but not inside
-lists, the table of contents and the other lists. Doing it there too pushes
-the table of contents onto a second page and pulls short bullet lists apart.
-Captions drop to 10 pt with only the label in bold, because at the size of
-the body text a bold caption competes with the text it belongs to.
+The vertical spacing is where the class departs from Word on purpose. Word
+adds the space below one paragraph to the space above the next instead of
+collapsing them, which comes to 18 pt between two paragraphs and 24 pt in
+front of every heading. On an A4 page at line spacing 1.2 that reads as a
+document full of holes, so only the space below counts, and the space above
+a heading is graded by level so that a `\subsubsection` sits visibly closer
+to the text it belongs to than a `\section` does. Captions drop to 10 pt
+with only the label in bold, because at the size of the body text a bold
+caption competes with the text it belongs to.
 
 Two more things deliberately differ. Small capitals become full capitals in
 `\menue`, because none of the four selectable typefaces ships a small-caps
 shape and `\textsc` would silently fall back to ordinary text. And listings
-use a monospaced screen font instead of Courier New. The guideline's real
-requirement is a fixed-width font at single spacing, which is what you get.
+use a monospaced screen font instead of Courier New, with the syntax
+highlighting every editor uses. The guideline's real requirement is a
+fixed-width font at single spacing, which is what you get.
 
 ---
 

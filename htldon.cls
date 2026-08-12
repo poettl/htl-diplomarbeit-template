@@ -97,15 +97,16 @@
 %   -> 6 pt above, 12 pt below, line spacing 1.2.
 %
 % Word adds the space below one paragraph to the space above the next
-% instead of collapsing them, so consecutive paragraphs sit 18 pt apart.
-% \parskip reproduces exactly that gap; the heading skips further down add
-% their own 12 pt on top of the preceding 12 pt, again as Word does.
+% instead of collapsing them, which would put 18 pt between two paragraphs
+% and 24 pt in front of every heading. On an A4 page at line spacing 1.2
+% that reads as a document full of holes, so only the space below counts,
+% the same rule the lists and the table of contents follow further down.
 % =====================================================================
 \RequirePackage{setspace}
 \setstretch{1.2}
 \setlength{\parindent}{0pt}
 \newlength{\htl@parskip}
-\setlength{\htl@parskip}{18pt plus 2pt minus 3pt}
+\setlength{\htl@parskip}{12pt plus 2pt minus 2pt}
 \setlength{\parskip}{\htl@parskip}
 
 % After a heading Word inserts far less: the heading's own space below plus
@@ -159,6 +160,12 @@
 \RequirePackage{xcolor}
 \definecolor{htlblau}{RGB}{26,108,160}
 \definecolor{htlgrau}{RGB}{89,89,89}
+% Syntax highlighting. Deliberately the colours every editor uses rather
+% than the school's blue: a listing is quoted material, and brand-coloured
+% keywords next to brand-coloured headings made the code read as a heading.
+\definecolor{htlcodekey}{RGB}{0,0,192}
+\definecolor{htlcodestr}{RGB}{163,21,21}
+\definecolor{htlcodekomm}{RGB}{0,128,0}
 
 % =====================================================================
 % Metadata
@@ -318,10 +325,10 @@
 % inherit it. The indents are absolute, which is why they are set in mm and
 % not in em -- in Word they do not shrink with the smaller heading sizes.
 %
-% The skips add the neighbouring paragraph's own spacing, because that is
-% how the two stack up in Word: a heading follows 12 pt below the previous
-% paragraph's 12 pt (= 24 pt) and is followed by its own 3 pt plus the next
-% paragraph's 6 pt (= 9 pt).
+% The skips above the headings are graded instead of Word's flat 12 pt on
+% every level, so that a \subsubsection is visibly closer to the text it
+% belongs to than a \section is. Word's own 24 pt above every heading, on
+% top of a paragraph rhythm this open, tore the page apart.
 % =====================================================================
 \setkomafont{chapter}{\color{htlblau}\bfseries\fontsize{16}{19.2}\selectfont}
 \setkomafont{section}{\color{htlblau}\bfseries\fontsize{14}{16.8}\selectfont}
@@ -344,10 +351,10 @@
 % afterskip carries only the heading's own space below; the 6 pt of the
 % paragraph that follows come from the \parskip patch above.
 \RedeclareSectionCommand[beforeskip=0pt, afterskip=3pt]{chapter}
-\RedeclareSectionCommand[beforeskip=-24pt, afterskip=3pt]{section}
-\RedeclareSectionCommand[beforeskip=-24pt, afterskip=3pt]{subsection}
-\RedeclareSectionCommand[beforeskip=-22pt, afterskip=1sp]{subsubsection}
-\RedeclareSectionCommand[runin=false, beforeskip=-22pt, afterskip=1sp]{paragraph}
+\RedeclareSectionCommand[beforeskip=-19pt, afterskip=3pt]{section}
+\RedeclareSectionCommand[beforeskip=-16pt, afterskip=3pt]{subsection}
+\RedeclareSectionCommand[beforeskip=-14pt, afterskip=1sp]{subsubsection}
+\RedeclareSectionCommand[runin=false, beforeskip=-14pt, afterskip=1sp]{paragraph}
 
 \setcounter{secnumdepth}{3}
 \setcounter{tocdepth}{2}
@@ -436,19 +443,16 @@
 \RequirePackage{listings}
 \renewcommand*{\lstlistingname}{\htl@txt{Quellcode}{Source code}}
 \renewcommand*{\lstlistlistingname}{\htl@txt{Quellcodeverzeichnis}{List of Source Code}}
-% Deliberately not brand-coloured: a listing is quoted material, not a piece
-% of the school's identity, and blue keywords next to blue headings made the
-% page read as if the code were another heading.
-% listings ends every code line with \par, so the 18 pt \parskip of the body
+% listings ends every code line with \par, so the 12 pt \parskip of the body
 % text would end up between the lines and tear the frame apart. The hook runs
 % inside the listing's own group, and it is also where the guideline's
 % "Zeilenabstand 1,0" is set.
 \lst@AddToHook{Init}{\setlength{\parskip}{0pt}\linespread{1}\selectfont}
 \lstset{
   basicstyle=\ttfamily\footnotesize,
-  keywordstyle=\bfseries,
-  commentstyle=\itshape\color{htlgrau},
-  stringstyle=\color{htlgrau},
+  keywordstyle=\bfseries\color{htlcodekey},
+  commentstyle=\itshape\color{htlcodekomm},
+  stringstyle=\color{htlcodestr},
   numbers=left, numberstyle=\tiny\color{htlgrau}, numbersep=8pt,
   frame=single, rulecolor=\color{htlgrau},
   breaklines=true, breakatwhitespace=true,
@@ -529,20 +533,42 @@
 % =====================================================================
 \newcommand{\titelblatt}{%
   \begin{titlepage}%
-  \newgeometry{left=25mm, right=14.6mm, top=9.4mm, bottom=15mm}%
+  % top=7.6mm puts the logo's top edge where Word has it. The letterhead of
+  % the Word template is a page-anchored graphic in header1.xml, 209.99 x
+  % 34.08 mm at (0,0); measured inside it, the logo runs from 7.55 to
+  % 23.01 mm and the rule sits at 26.70 mm.
+  \newgeometry{left=25mm, right=14.6mm, top=7.6mm, bottom=15mm}%
   \thispagestyle{empty}%
   \setlength{\parindent}{0pt}\setlength{\parskip}{0pt}%
+  % KOMA's parskip option gives \parfillskip a natural width of 1em so that
+  % the last line of a paragraph is always visibly short. On this page every
+  % element is exactly \linewidth wide, and that 1em made each of them
+  % overfull by 10.95pt.
+  \setlength{\parfillskip}{0pt plus 1fil}%
   \linespread{1}\selectfont
   % --- Letterhead ---
-  \noindent
-  \begin{minipage}[b]{0.45\linewidth}
-    \fontsize{8}{10.5}\selectfont
-    \textbf{htl donaustadt}\\ \htl@schuladresse
-  \end{minipage}\hfill
-  \begin{minipage}[b]{0.5\linewidth}
-    \raggedleft\includegraphics[width=55mm]{\htl@logo}
-  \end{minipage}
-  \par\vspace{4.7mm}
+  % \hbox to\linewidth, not an ordinary paragraph: in a paragraph the \hfill
+  % has to share the leftover space with \parfillskip, which also stretches
+  % infinitely. The logo then stopped 3.9 mm short of the rule below it,
+  % while the address on the left sat flush against it. The % after each
+  % \end{minipage} keeps the line breaks from adding a space on top of that.
+  \noindent\hbox to\linewidth{%
+    \begin{minipage}[b]{0.45\linewidth}
+      \fontsize{8}{10.5}\selectfont
+      \textbf{htl donaustadt}\\ \htl@schuladresse
+    \end{minipage}%
+    \hfil
+    % Scaled by height, not by width: in Word the letterhead graphic is
+    % stretched horizontally, so its logo is 67.7 mm wide but only 15.46 mm
+    % high. Matching the height is what keeps the rule below it in place.
+    \begin{minipage}[b]{0.5\linewidth}%
+      \raggedleft\includegraphics[height=15.46mm]{\htl@logo}%
+    \end{minipage}%
+  }%
+  % \nointerlineskip: without it TeX adds a full \baselineskip between the
+  % letterhead and the rule, which was the missing 4.8 mm that pushed the
+  % rule down to 34.7 mm instead of Word's 26.7 mm.
+  \par\nointerlineskip\vspace{3.69mm}%
   \noindent\rule{\linewidth}{0.4pt}
   % --- Title ---
   \par\vspace{9.5mm}
@@ -692,19 +718,32 @@
 \newcommand{\kihilfsmittel}[4]{%
   \g@addto@macro\htl@kiliste{#1 & #2 & #3 & #4 \\}}
 
+% The table carries a caption of its own. Without one it still consumed a
+% table number -- xltabular builds on longtable, which steps the counter --
+% and the list of tables then jumped from Tab. 1 to Tab. 3. Besides, the
+% department guideline wants every table captioned.
 \newcommand{\listekihilfsmittel}{%
   \ifdefempty{\htl@kiliste}{}{%
     \begingroup
     % No \small here -- xltabular already picks up \tabellenschrift.
     \setlength{\tabcolsep}{7pt}%
     \newcolumntype{Y}{>{\raggedright\arraybackslash}X}%
-    \begin{xltabular}{\linewidth}{@{}YYYY@{}}
+    \def\htl@kikopf{%
       \toprule
       \bfseries\htl@txt{KI-basiertes Hilfsmittel}{AI-based tool} &
       \bfseries\htl@txt{Einsatzform}{Form of use} &
       \bfseries\htl@txt{Betroffene Teile der Arbeit}{Affected parts} &
       \bfseries\htl@txt{Verwendete Prompts}{Prompts used} \\
-      \midrule
+      \midrule}%
+    \begin{xltabular}{\linewidth}{@{}YYYY@{}}
+      \caption{\htl@txt{Eingesetzte KI-basierte Hilfsmittel}%
+                       {AI-based tools used}}%
+      \label{tab:kihilfsmittel}\\
+      \htl@kikopf
+      \endfirsthead
+      \caption[]{\htl@txt{Eingesetzte KI-basierte Hilfsmittel (Fortsetzung)}%
+                         {AI-based tools used (continued)}}\\
+      \htl@kikopf
       \endhead
       \htl@kiliste
       \bottomrule
