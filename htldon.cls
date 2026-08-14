@@ -87,7 +87,10 @@
   \ifdefstring{\htl@schrift}{carlito}{\RequirePackage[default,sfdefault]{carlito}}{}%
   \ifdefstring{\htl@schrift}{lato}{\RequirePackage[default,defaultsans]{lato}}{}%
 }
-\RequirePackage[scaled=0.94]{inconsolata}
+% IBM Plex Mono: humanist like the four body typefaces, and it keeps its
+% weight at the \footnotesize of the listings, where Inconsolata went thin.
+% Scaled down slightly so a code line still fits the text width.
+\RequirePackage[scale=0.95]{plex-mono}
 \RequirePackage{microtype}
 
 % =====================================================================
@@ -665,8 +668,14 @@
 
 % Subheadings in the front matter: black and bold, or underlined -- the front
 % matter deliberately does NOT take the blue capitals of the main part.
+% The 6 pt below and the \parskip patch of \@afterheading together give the
+% 12 pt that a paragraph after a heading gets everywhere else. Without the
+% explicit space a tabular following the heading would collapse against it:
+% its box is taller than \baselineskip, so TeX falls back to \lineskip and
+% the \toprule ends up looking like an underline of the heading.
 \newcommand{\vorspannabschnitt}[1]{%
-  \par\addvspace{.8\baselineskip}\noindent\textbf{#1}\par\nobreak}
+  \par\addvspace{.8\baselineskip}\noindent\textbf{#1}\par\nobreak
+  \vspace{6pt}\@afterheading}
 \newcommand{\vorspannunterpunkt}[1]{%
   \par\addvspace{.5\baselineskip}\noindent\underline{#1}\par\nobreak}
 

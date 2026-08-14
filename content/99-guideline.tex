@@ -1,6 +1,6 @@
 % =====================================================================
 % Kapitel 6 der Abteilungsvorlage, auf LaTeX übertragen.
-% Vor der Abgabe komplett löschen: die Zeile \input{chapters/06-guideline}
+% Vor der Abgabe komplett löschen: die Zeile \input{content/99-guideline}
 % in diplomarbeit.tex entfernen und diese Datei mitlöschen.
 % =====================================================================
 \chapter{Richtlinie für das Verfassen von Diplomarbeiten}
@@ -50,16 +50,16 @@ Alle Beispieltexte in dieser Vorlage sind zu ersetzen oder zu löschen. Das
 betrifft insbesondere:
 
 \begin{itemize}
-  \item Die Metadaten in \lstinline|metadata.tex| (Titel, Team, Betreuung,
+  \item Die Metadaten in \lstinline|content/00-metadata.tex| (Titel, Team, Betreuung,
         Schuljahr, Klasse).
-  \item Die Beispielkapitel in \lstinline|chapters/|.
+  \item Die Beispielkapitel in \lstinline|content/|.
   \item Die Beispielquellen in \lstinline|references.bib|.
   \item Das Abkürzungsverzeichnis in \lstinline|diplomarbeit.tex|.
   \item Dieses gesamte Kapitel~6.
 \end{itemize}
 
 Um dieses Kapitel zu entfernen, genügt es, in \lstinline|diplomarbeit.tex|
-die Zeile \lstinline|\input{chapters/06-guideline}| zu löschen. Die Einträge
+die Zeile \lstinline|\input{content/99-guideline}| zu löschen. Die Einträge
 im Inhaltsverzeichnis und in den übrigen Verzeichnissen verschwinden beim
 nächsten Übersetzen von selbst.
 
@@ -330,7 +330,7 @@ Für die Darstellung von Quellcode gilt:
 
 \subsection{Titelseite}
 
-Die Titelseite wird vollständig aus \lstinline|metadata.tex| erzeugt. Dort
+Die Titelseite wird vollständig aus \lstinline|content/00-metadata.tex| erzeugt. Dort
 sind einzutragen:
 
 \begin{itemize}
@@ -362,7 +362,7 @@ gegebenenfalls Kooperationen mit Firmen und Sperrvermerke.
 
 Die Seite \enquote{Problemstellung} wird durch den eingescannten Antrag (mit
 allen Stempeln und Unterschriften) vollflächig ersetzt. Dazu wird in
-\lstinline|frontmatter/problem-statement.tex| das Scan-PDF eingebunden.
+\lstinline|content/10-problem-statement.tex| das Scan-PDF eingebunden.
 
 \subsection{Kurzfassung bzw.\ Abstract}
 
@@ -423,4 +423,4 @@ Inhalt eines beigefügten elektronischen Speichermediums sowie einen
 einseitigen Lebenslauf jedes Teammitglieds enthalten.
 
 Verpflichtend ist außerdem die Dokumentation aller eingesetzten KI-basierten
-Hilfsmittel. Dafür ist \lstinline|appendix/ai-tools.tex| vorgesehen.
+Hilfsmittel. Dafür ist \lstinline|content/90-ai-tools.tex| vorgesehen.

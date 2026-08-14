@@ -61,7 +61,7 @@ diploma thesis.
 
 ---
 
-## 2. First step: `metadata.tex`
+## 2. First step: `content/00-metadata.tex`
 
 This is the **only** file you have to touch at the start. It holds the title,
 the team, the supervisors, the class, and the school year. Everything else is
@@ -97,26 +97,28 @@ printout you sign carries the day you printed it.
 If a **given name** starts with a special character (Ö, Č, Š …), supply the
 short form yourself: `\teammitglied[Ö. Beispiel]{BEISPIEL}{Öznur}`.
 
-No project logo? Just delete the `\projektlogo{...}` line in `metadata.tex`.
+No project logo? Just delete the `\projektlogo{...}` line in
+`content/00-metadata.tex`.
 
 ---
 
 ## 3. Where does what go?
 
+All the text lives in `content/`, numbered in the order it appears in the
+thesis:
+
 ```
-metadata.tex               title, team, supervisors    <- start here
-frontmatter/
-  problem-statement.tex    content of the approved topic proposal
-  abstract.tex             Kurzfassung, Abstract, acknowledgements
-chapters/
-  01-introduction.tex      motivation, objectives
-  02-project-planning.tex  process model, sprints
-  03-fundamentals.tex      the technologies you use
-  04-implementation.tex    what you built              <- the core chapter
-  05-evaluation.tex        target/actual comparison, conclusion
-  06-guideline.tex         the department's guideline  <- delete before submitting
-appendix/
-  ai-tools.tex             AI tools used
+content/
+  00-metadata.tex          title, team, supervisors    <- start here
+  10-problem-statement.tex content of the approved topic proposal
+  11-abstract.tex          Kurzfassung, Abstract, acknowledgements
+  20-introduction.tex      motivation, objectives
+  21-project-planning.tex  process model, sprints
+  22-fundamentals.tex      the technologies you use
+  23-implementation.tex    what you built              <- the core chapter
+  24-evaluation.tex        target/actual comparison, conclusion
+  90-ai-tools.tex          AI tools used (appendix)
+  99-guideline.tex         the department's guideline  <- delete before submitting
 images/                    all screenshots and diagrams
 references.bib             all sources
 diplomarbeit.tex           order of the parts + list of abbreviations
@@ -124,13 +126,13 @@ htldon.cls                 the layout, do not modify
 build/                     created by the build, not tracked in Git
 ```
 
-Need an extra chapter? Create a new file in `chapters/` and pull it in at the
-right place in `diplomarbeit.tex` with `\input{chapters/07-...}`.
+Need an extra chapter? Create a new file in `content/` and pull it in at the
+right place in `diplomarbeit.tex` with `\input{content/25-...}`.
 
-`chapters/06-guideline.tex` is chapter 6 of the department's Word template,
+`content/99-guideline.tex` is chapter 6 of the department's Word template,
 rewritten for LaTeX. Read it once at the start: it is what you are graded
 against. **Delete it before you submit**: remove the
-`\input{chapters/06-guideline}` line from `diplomarbeit.tex` and the file
+`\input{content/99-guideline}` line from `diplomarbeit.tex` and the file
 itself.
 
 ---
@@ -401,14 +403,14 @@ Your backup is the repository itself.
 
 ## 8. Checklist before submission
 
-- [ ] `metadata.tex` complete, names and title spelled correctly
+- [ ] `content/00-metadata.tex` complete, names and title spelled correctly
 - [ ] Declaration of authorship signed by everyone (on the printout)
 - [ ] Both the German Kurzfassung **and** the English Abstract present
 - [ ] Every chapter has the right `\abschnittsautor`
 - [ ] Every figure and table has a caption and is referenced in the text
 - [ ] No entry in the bibliography that is never cited
-- [ ] AI tools fully documented in `appendix/ai-tools.tex`
-- [ ] `chapters/06-guideline.tex` removed, along with its `\input` line
+- [ ] AI tools fully documented in `content/90-ai-tools.tex`
+- [ ] `content/99-guideline.tex` removed, along with its `\input` line
 - [ ] Build produces no errors and no `??` / `[?]` in the PDF
 
 ---

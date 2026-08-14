@@ -13,24 +13,24 @@
 
 \addbibresource{references.bib}
 
-\input{metadata}
+\input{content/00-metadata}
 
 \begin{document}
 
 % --- Front matter (no page numbers, not in the table of contents) -----
 \titelblatt
 \eigenstaendigkeitserklaerung
-\input{frontmatter/problem-statement}
-\input{frontmatter/abstract}
+\input{content/10-problem-statement}
+\input{content/11-abstract}
 
 \inhaltsverzeichnis
 
 % --- Main part -------------------------------------------------------
-\input{chapters/01-introduction}
-\input{chapters/02-project-planning}
-\input{chapters/03-fundamentals}
-\input{chapters/04-implementation}
-\input{chapters/05-evaluation}
+\input{content/20-introduction}
+\input{content/21-project-planning}
+\input{content/22-fundamentals}
+\input{content/23-implementation}
+\input{content/24-evaluation}
 
 % --- Back matter (with an entry in the table of contents) -------------
 \abschnittsautor{}
@@ -48,10 +48,10 @@
 \end{abkuerzungsverzeichnis}
 
 \nachspannkapitel{Anhang}
-\input{appendix/ai-tools}
+\input{content/90-ai-tools}
 \listekihilfsmittel
 
 % --- Richtlinie der Abteilung: vor der Abgabe diese Zeile löschen ------
-\input{chapters/06-guideline}
+\input{content/99-guideline}
 
 \end{document}
